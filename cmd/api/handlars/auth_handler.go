@@ -16,7 +16,6 @@ func (h *Handler) RegisterHandler(c echo.Context) error {
 	payload := new(requests.RegisterUserRequest)
 	err := (&echo.DefaultBinder{}).Bind(&payload, c)
 	if err != nil {
-		log.Println("--------------------------------")
 		return SendBadRequestResponse(c, err.Error())
 	}
 	validationErrors := h.ValidateBodyRequest(c, *payload)
@@ -28,10 +27,16 @@ func (h *Handler) RegisterHandler(c echo.Context) error {
 	userService := services.NewUserService(h.DB)
 	// Check if email exists
 	email, err := userService.GetUserByEmail(payload.Email)
-	if errors.Is(err, gorm.ErrRecordNotFound) {
-		userService.RegisterUser(*payload)
+	if !errors.Is(err, gorm.ErrRecordNotFound) {
+		return errors.New("user is present")
 	}
+	fmt.Println(email)
+	// Create user
+	newuser, err := userService.RegisterUser(*payload)
+	if err != nil {
+		return err
+	}
+	log.Printf("payload:%v", *payload)
 
-	fmt.Printf("user:%v", email)
-	return SendSuccessResponse(c, "User regitration successful", nil)
+	return SendSuccessResponse(c, "User regitration successful", newuser)
 }

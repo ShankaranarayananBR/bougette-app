@@ -5,11 +5,13 @@ import (
 	"log"
 	"os"
 
+	"github.com/ShankaranarayananBR/bougette-backend/internal/models"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
 func NewMysql() (*gorm.DB, error) {
+	var usermodel models.UserModel
 	host := os.Getenv("DB_HOST")
 	port := os.Getenv("DB_PORT")
 	database := os.Getenv("DB_NAME")
@@ -22,6 +24,7 @@ func NewMysql() (*gorm.DB, error) {
 	if err != nil {
 		return nil, err
 	}
+	db.AutoMigrate(usermodel)
 	log.Default().Printf("Database connection successful%v", &db)
 	return db, nil
 }

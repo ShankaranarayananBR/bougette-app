@@ -2,8 +2,8 @@ package main
 
 import (
 	"fmt"
-    "log"
-    "os"
+	"log"
+	"os"
 
 	"github.com/ShankaranarayananBR/bougette-backend/cmd/api/handlars"
 	app_middleware "github.com/ShankaranarayananBR/bougette-backend/cmd/api/middleware"

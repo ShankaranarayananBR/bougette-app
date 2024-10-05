@@ -11,19 +11,19 @@ type ApiResponse map[string]any
 type JSONSuccess struct {
 	Success bool        `json:"success"`
 	Message string      `json:"message"`
-	Data    interface{} `json:"data"`
+	Data    interface{} `json:"data,omitempty"`
 }
 
 type JSONFailedValidationResult struct {
 	Success bool               `json:"success"`
 	Message string             `json:"message"`
-	Errors  []*ValidationError `json:"errors"`
+	Errors  []*ValidationError `json:"errors,omitempty"`
 }
 
 type JSONErrorResponse struct {
 	Success bool             `json:"success"`
 	Message string           `json:"message"`
-	Errors  *ValidationError `json:"errors"`
+	Errors  *ValidationError `json:"errors,omitempty"`
 }
 
 func SendSuccessResponse(c echo.Context, message string, data interface{}) error {

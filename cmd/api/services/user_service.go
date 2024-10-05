@@ -1,10 +1,10 @@
 package services
 
 import (
+	"errors"
 	"log"
 
 	"github.com/ShankaranarayananBR/bougette-backend/cmd/api/requests"
-	"github.com/ShankaranarayananBR/bougette-backend/common"
 	"github.com/ShankaranarayananBR/bougette-backend/internal/models"
 	"gorm.io/gorm"
 )
@@ -18,17 +18,19 @@ func NewUserService(db *gorm.DB) *UserService {
 }
 
 func (usr *UserService) RegisterUser(userrequest requests.RegisterUserRequest) (*models.UserModel, error) {
-	//Hash the password, should not store
-	password, err := common.HashPassword(userrequest.Password)
-	if err != nil {
-		return nil, err
+	createdUser := models.UserModel{
+		FirstName: userrequest.FirstName,
+		LastName:  userrequest.LastName,
+		Email:     userrequest.Email,
+		Password:  userrequest.Password,
 	}
-	log.Printf("Hashed password:%v", password)
-	if common.CheckPasswordHash(userrequest.Password, password) {
-		log.Println("Password hashed successfully")
+	log.Printf("createduser:%v", createdUser)
+	result := usr.db.Create(&createdUser)
+	if result.Error != nil {
+		return nil, errors.New("registration failed")
 	}
 
-	return nil, nil
+	return &createdUser, nil
 }
 
 func (usr *UserService) GetUserByEmail(email string) (*models.UserModel, error) {
