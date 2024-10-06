@@ -41,3 +41,8 @@ func (usr *UserService) GetUserByEmail(email string) (*models.UserModel, error) 
 	}
 	return &user, nil
 }
+
+func (usr *UserService) UpdateUserDetails(userreqest requests.RegisterUserRequest, detail string) (*models.UserModel, error) {
+
+	return nil, nil
+}

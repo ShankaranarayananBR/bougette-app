@@ -37,6 +37,6 @@ func (h *Handler) RegisterHandler(c echo.Context) error {
 		return err
 	}
 	log.Printf("payload:%v", *payload)
-
+	// update user
 	return SendSuccessResponse(c, "User regitration successful", newuser)
 }
